@@ -71,8 +71,8 @@ HSVFilterNode::image_callback(const sensor_msgs::msg::Image::ConstSharedPtr & ms
   cv::inRange(img_hsv, cv::Scalar(h_, s_, v_), cv::Scalar(H_, S_, V_), filtered);
 
   cv_bridge::CvImage out_image;
-  out_image.header = msg->header; // Same timestamp and tf frame as input image
-  out_image.encoding = sensor_msgs::image_encodings::TYPE_32FC1; // Or whatever
+  out_image.header = msg->header;  // Same timestamp and tf frame as input image
+  out_image.encoding = sensor_msgs::image_encodings::TYPE_32FC1;  // Or whatever
   cv_ptr->image.copyTo(out_image.image, filtered);
 
   cv::imshow("Filtered Image", out_image.image);
