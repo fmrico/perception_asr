@@ -1,3 +1,5 @@
+[![main](https://github.com/fmrico/perception_asr/actions/workflows/main.yaml/badge.svg)](https://github.com/fmrico/perception_asr/actions/workflows/main.yaml)
+
 # perception_asr
 
 These are examples of Image and PointCloud2 perception from HSV filters and Darknet ROS.
