@@ -55,7 +55,8 @@ DetectionTo3DfromDepthNode::DetectionTo3DfromDepthNode()
 void
 DetectionTo3DfromDepthNode::callback_info(sensor_msgs::msg::CameraInfo::UniquePtr msg)
 {
-  std::cerr << "camera" << std::endl;
+  RCLCPP_INFO(get_logger(), "Camera info received");
+
   model_ = std::make_shared<image_geometry::PinholeCameraModel>();
   model_->fromCameraInfo(*msg);
 
