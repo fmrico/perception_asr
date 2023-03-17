@@ -27,7 +27,8 @@ def generate_launch_description():
 
     ld = LaunchDescription()
 
-    perception_asr_stressoverflow_dir = get_package_share_directory('perception_asr_stressoverflow')
+    perception_asr_stressoverflow_dir = get_package_share_directory(
+                                        'perception_asr_stressoverflow')
 
     config = os.path.join(perception_asr_stressoverflow_dir, 'config', 'params.yaml')
 
@@ -45,9 +46,8 @@ def generate_launch_description():
 
         darknet_cmd = IncludeLaunchDescription(
             PythonLaunchDescriptionSource(os.path.join(darknet_dir,
-                                                      'launch',
-                                                      'darknet_ros.launch.py')
-                                        ))
+                                                       'launch',
+                                                       'darknet_ros.launch.py')))
 
         ld.add_action(darknet_cmd)
 
