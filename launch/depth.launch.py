@@ -12,29 +12,44 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# import os
+import os
+import yaml
 
-# from ament_index_python.packages import get_package_share_directory
+from ament_index_python.packages import get_package_share_directory
 
 from launch import LaunchDescription
-# from launch.actions import IncludeLaunchDescription
-# from launch.launch_description_sources import PythonLaunchDescriptionSource
+from launch.actions import IncludeLaunchDescription
+from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch_ros.actions import Node
 
 
 def generate_launch_description():
 
-    # darknet_dir = get_package_share_directory('darknet_ros')
+    ld = LaunchDescription()
 
-    # darknet_cmd = IncludeLaunchDescription(
-    #     PythonLaunchDescriptionSource(os.path.join(darknet_dir,
-    #                                                'launch',
-    #                                                'darknet_ros.launch.py')
-    #                                  ))
+    perception_asr_stressoverflow_dir = get_package_share_directory('perception_asr_stressoverflow')
 
-    # params_file = os.path.join(
-    #     get_package_share_directory('perception_asr_stressoverflow'),
-    #     )
+    config = os.path.join(perception_asr_stressoverflow_dir, 'config', 'params.yaml')
+
+    with open(config, "r") as stream:
+        try:
+            conf = (yaml.safe_load(stream))
+
+        except yaml.YAMLError as exc:
+            print(exc)
+
+    darknet = conf['perception_asr_stressoverflow']['darknet']
+
+    if darknet:
+        darknet_dir = get_package_share_directory('darknet_ros')
+
+        darknet_cmd = IncludeLaunchDescription(
+            PythonLaunchDescriptionSource(os.path.join(darknet_dir,
+                                                      'launch',
+                                                      'darknet_ros.launch.py')
+                                        ))
+
+        ld.add_action(darknet_cmd)
 
     perception_asr_cmd = Node(package='perception_asr_stressoverflow',
                               executable='darknet_detection',
@@ -47,18 +62,22 @@ def generate_launch_description():
                                 ('output_detection_2d', '/output_detection_2d'),
                               ])
 
-    perception_asr2_cmd = Node(package='perception_asr_stressoverflow',
-                               executable='darknet_detection',
-                               output='screen',
-                               parameters=[{
-                                 'use_sim_time': False
-                               }],
-                               remappings=[
-                                 # ('camera_info', '/camera/depth/camera_info'),
-                                 ('input_depth', '/camera/depth/image_raw'),
-                                 ('input_detection_2d', '/darknet_ros/bounding_boxes'),
-                                 ('output_detection_2d', '/output_detection_2d'),
-                               ])
+    ld.add_action(perception_asr_cmd)
+
+    # perception_asr2_cmd = Node(package='perception_asr_stressoverflow',
+    #                            executable='darknet_detection',
+    #                            output='screen',
+    #                            parameters=[{
+    #                              'use_sim_time': False
+    #                            }],
+    #                            remappings=[
+    #                              # ('camera_info', '/camera/depth/camera_info'),
+    #                              ('input_depth', '/camera/depth/image_raw'),
+    #                              ('input_detection_2d', '/darknet_ros/bounding_boxes'),
+    #                              ('output_detection_2d', '/output_detection_2d'),
+    #                            ])
+
+    # ld.add_action(perception_asr2_cmd)
 
     detectionTo3DfromDepth_cmd = Node(package='perception_asr_stressoverflow',
                                       executable='detection_2d_to_3d_depth',
@@ -73,6 +92,8 @@ def generate_launch_description():
                                         ('output_detection_3d', '/output_detection_3d'),
                                       ])
 
+    ld.add_action(detectionTo3DfromDepth_cmd)
+
     tf_cmd = Node(package='perception_asr_stressoverflow',
                   executable='tf_perception_asr',
                   output='screen',
@@ -82,6 +103,8 @@ def generate_launch_description():
                   remappings=[
                     ('input_3d', '/output_detection_3d'),
                   ])
+
+    ld.add_action(tf_cmd)
 
     # HSVfilter_cmd = Node(package='perception_asr_stressoverflow',
     #                           executable='hsv_filter',
@@ -94,13 +117,5 @@ def generate_launch_description():
     #                             ('input_depth', '/camera/depth/image_raw'),
     #                             ('output_detection_3d', '/darknet_ros/bounding_boxes'),
     #                           ])
-
-    ld = LaunchDescription()
-    # ld.add_action(darknet_cmd)
-    ld.add_action(perception_asr_cmd)
-    ld.add_action(perception_asr2_cmd)
-    ld.add_action(detectionTo3DfromDepth_cmd)
-    ld.add_action(tf_cmd)
-    # ld.add_action(HSVfilter_cmd)
 
     return ld
