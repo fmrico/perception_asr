@@ -1,4 +1,4 @@
-// Copyright 2023 Intelligent Robotics Lab
+// Copyright 2023 (c) Intelligent Robotics Lab
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
 
 #include <memory>
 
-#include "perception_asr/DarknetDetectionNode.hpp"
+#include "perception_asr_stressoverflow/DarknetDetectionNode.hpp"
 
 #include "darknet_ros_msgs/msg/bounding_boxes.hpp"
 #include "vision_msgs/msg/detection2_d_array.hpp"
@@ -24,7 +24,7 @@
 
 #include "rclcpp/rclcpp.hpp"
 
-namespace perception_asr
+namespace perception_asr_stressoverflow
 {
 
 using std::placeholders::_1;
@@ -51,8 +51,8 @@ DarknetDetectionNode::detection_callback(
       vision_msgs::msg::Detection2D detection_msg;
       detection_msg.header = msg->image_header;
 
-      detection_msg.bbox.center.position.x = (bbx.xmax - bbx.xmin) / 2;
-      detection_msg.bbox.center.position.y = (bbx.ymax - bbx.ymin) / 2;
+      detection_msg.bbox.center.position.x = ((bbx.xmax - bbx.xmin) / 2) + bbx.xmin;
+      detection_msg.bbox.center.position.y = ((bbx.ymax - bbx.ymin) / 2) + bbx.ymin;
       detection_msg.bbox.size_x = bbx.xmax - bbx.xmin;
       detection_msg.bbox.size_y = bbx.ymax - bbx.ymin;
 
@@ -67,4 +67,4 @@ DarknetDetectionNode::detection_callback(
   }
 }
 
-}  // namespace perception_asr
+}  // namespace perception_asr_stressoverflow

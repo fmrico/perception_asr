@@ -1,10 +1,13 @@
 <?xml version="1.0"?>
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
-  <name>perception_asr</name>
+  <name>perception_asr_stressoverflow</name>
   <version>0.0.0</version>
-  <description>Example for perception</description>
-  <maintainer email="fmrico@gmail.com">fmrico</maintainer>
+  <description>Perception procedure for E2</description>
+  <maintainer email="c.escarcena.2021@alumnos.urjc.es">Carlos Escarcena</maintainer>
+  <maintainer email="a.garciab.2021@alumnos.urjc.es">Arantxa García</maintainer>
+  <maintainer email="d.garciac.2021@alumnos.urjc.es">Diego García</maintainer>
+  <maintainer email="mt.ortega.2021@alumnos.urjc.es">Teresa Ortega</maintainer>
   <license>Apache License, Version 2.0</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
@@ -20,6 +23,8 @@
   <depend>pcl_ros</depend>
   <depend>image_geometry</depend>
   <depend>depth_image_proc</depend>
+  <depend>tf2_geometry_msgs</depend>
+  <depend>visualization_msgs</depend>
 
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>

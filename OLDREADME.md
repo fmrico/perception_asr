@@ -1,6 +1,6 @@
-[![main](https://github.com/dgarcu/perception_asr_stressoverflow/actions/workflows/main.yaml/badge.svg)](https://github.com/dgarcu/perception_asr_stressoverflow/actions/workflows/main.yaml)
+[![main](https://github.com/fmrico/perception_asr_stressoverflow/actions/workflows/main.yaml/badge.svg)](https://github.com/fmrico/perception_asr_stressoverflow/actions/workflows/main.yaml)
 
-# perception_asr_stressoverflow
+# perception_asr
 
 These are examples of Image and PointCloud2 perception from HSV filters and Darknet ROS.
 

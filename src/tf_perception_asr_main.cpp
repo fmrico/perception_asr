@@ -1,4 +1,4 @@
-// Copyright 2023 (c) StressOverflow
+// Copyright 2021 (c) StressOverflow
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,25 +14,24 @@
 
 #include <memory>
 
-#include "perception_asr_stressoverflow/DetectionTo3DfromDepthNode.hpp"
+#include "perception_asr_stressoverflow/tf_perception_asrNode.hpp"
+#include "perception_asr_stressoverflow/ObstacleMonitorNode.hpp"
+
 #include "rclcpp/rclcpp.hpp"
 
 int main(int argc, char * argv[])
 {
   rclcpp::init(argc, argv);
 
-  auto node_converter =
-    std::make_shared<perception_asr_stressoverflow::DetectionTo3DfromDepthNode>();
-  auto node_detector =
-    std::make_shared<perception_asr_stressoverflow::DetectionTo3DfromDepthNode>();
+  auto obstacle_detector = std::make_shared<perception_asr_stressoverflow::tf_perception_asrNode>();
+  auto obstacle_monitor = std::make_shared<perception_asr_stressoverflow::ObstacleMonitorNode>();
 
   rclcpp::executors::SingleThreadedExecutor executor;
-
-  executor.add_node(node_converter);
-  executor.add_node(node_detector);
+  executor.add_node(obstacle_detector->get_node_base_interface());
+  executor.add_node(obstacle_monitor->get_node_base_interface());
 
   executor.spin();
-  rclcpp::shutdown();
 
+  rclcpp::shutdown();
   return 0;
 }
