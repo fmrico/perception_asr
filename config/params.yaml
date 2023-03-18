@@ -14,8 +14,9 @@
 
 # Options:
 #
-# Darknet: true - false
+# launch_darknet: true - false
 
 
 perception_asr_stressoverflow:
-  darknet: true
+  launchers:
+    launch_darknet: true

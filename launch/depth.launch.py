@@ -39,9 +39,9 @@ def generate_launch_description():
         except yaml.YAMLError as exc:
             print(exc)
 
-    darknet = conf['perception_asr_stressoverflow']['darknet']
+    launch_darknet = conf['perception_asr_stressoverflow']['launchers']['launch_darknet']
 
-    if darknet:
+    if launch_darknet:
         darknet_dir = get_package_share_directory('darknet_ros')
 
         darknet_cmd = IncludeLaunchDescription(
