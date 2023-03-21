@@ -12,14 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef PERCEPTION_ASR_STRESSOVERFLOW__OBSTACLEMONITORNODE_HPP_
-#define PERCEPTION_ASR_STRESSOVERFLOW__OBSTACLEMONITORNODE_HPP_
+#ifndef PERCEPTION_ASR_STRESSOVERFLOW__DETECTEDPERSONMONITOR_HPP_
+#define PERCEPTION_ASR_STRESSOVERFLOW__DETECTEDPERSONMONITOR_HPP_
 
 #include <tf2_ros/buffer.h>
 #include <tf2_ros/transform_listener.h>
 
 #include <memory>
-
 
 #include "sensor_msgs/msg/laser_scan.hpp"
 #include "visualization_msgs/msg/marker.hpp"
@@ -29,10 +28,10 @@
 namespace perception_asr_stressoverflow
 {
 
-class ObstacleMonitorNode : public rclcpp::Node
+class DetectedPersonMonitor : public rclcpp::Node
 {
 public:
-  ObstacleMonitorNode();
+  DetectedPersonMonitor();
 
 private:
   void control_cycle();
@@ -46,4 +45,4 @@ private:
 
 }  // namespace perception_asr_stressoverflow
 
-#endif  // PERCEPTION_ASR_STRESSOVERFLOW__OBSTACLEMONITORNODE_HPP_
+#endif  // PERCEPTION_ASR_STRESSOVERFLOW__DETECTEDPERSONMONITOR_HPP_

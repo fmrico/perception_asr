@@ -26,5 +26,6 @@ int main(int argc, char * argv[])
   rclcpp::spin(node_detector);
 
   rclcpp::shutdown();
+
   return 0;
 }

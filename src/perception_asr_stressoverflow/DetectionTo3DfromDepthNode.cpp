@@ -111,7 +111,7 @@ DetectionTo3DfromDepthNode::callback_sync(
 
       ray = ray / ray.z;
       cv::Point3d point = ray * depth;
-      //detection_3d_msg.results.hypothesis.class_id = results.hypothesis.class_id;
+
       detection_3d_msg.bbox.center.position.x = point.x;
       detection_3d_msg.bbox.center.position.y = point.y;
       detection_3d_msg.bbox.center.position.z = point.z;

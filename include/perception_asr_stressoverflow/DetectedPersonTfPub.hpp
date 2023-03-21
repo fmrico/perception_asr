@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef PERCEPTION_ASR_STRESSOVERFLOW__TF_PERCEPTION_ASRNODE_HPP_
-#define PERCEPTION_ASR_STRESSOVERFLOW__TF_PERCEPTION_ASRNODE_HPP_
+#ifndef PERCEPTION_ASR_STRESSOVERFLOW__DETECTED_PERSON_TF_PUB_HPP_
+#define PERCEPTION_ASR_STRESSOVERFLOW__DETECTED_PERSON_TF_PUB_HPP_
 
 #include <tf2_ros/static_transform_broadcaster.h>
 #include <tf2_ros/buffer.h>
@@ -35,10 +35,10 @@
 namespace perception_asr_stressoverflow
 {
 
-class tf_perception_asrNode : public rclcpp::Node
+class DetectedPersonTfPub : public rclcpp::Node
 {
 public:
-  tf_perception_asrNode();
+  DetectedPersonTfPub();
 
 private:
   void tf_callback(vision_msgs::msg::Detection3DArray::UniquePtr msg);
@@ -52,4 +52,4 @@ private:
 
 }  // perception_asr_stressoverflow
 
-#endif  // PERCEPTION_ASR_STRESSOVERFLOW__TF_PERCEPTION_ASRNODE_HPP_
+#endif  // PERCEPTION_ASR_STRESSOVERFLOW__DETECTED_PERSON_TF_PUB_HPP_

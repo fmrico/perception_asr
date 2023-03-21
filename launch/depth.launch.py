@@ -52,16 +52,20 @@ def generate_launch_description():
 
     launch_darknet = conf['perception_asr_stressoverflow']['launchers']['launch_darknet']
     kobuki_camera = ir_conf['ir_robots']['kobuki_camera']
+    sim_kobuki = ir_conf['ir_robots']['simulation']
 
     if launch_darknet:
         darknet_dir = get_package_share_directory('darknet_ros')
 
-        if 'xtion' in kobuki_camera:
-            camera_remap = 'camera/rgb/image_raw'
-        elif 'astra' in kobuki_camera:
-            camera_remap = 'camera/color/image_raw'
+        if sim_kobuki:
+            camera_remap = 'camera/image_raw'
         else:
-            camera_remap = 'image_raw'
+            if 'xtion' in kobuki_camera:
+                camera_remap = 'camera/rgb/image_raw'
+            elif 'astra' in kobuki_camera:
+                camera_remap = 'camera/color/image_raw'
+            else:
+                camera_remap = 'image_raw'
 
         darknet_cmd = IncludeLaunchDescription(
             PythonLaunchDescriptionSource(os.path.join(darknet_dir,
@@ -77,7 +81,7 @@ def generate_launch_description():
                               executable='darknet_detection',
                               output='screen',
                               parameters=[{
-                                'use_sim_time': False
+                                'use_sim_time': sim_kobuki
                               }],
                               remappings=[
                                 ('input_bbxs_detection', '/darknet_ros/bounding_boxes'),
@@ -86,26 +90,11 @@ def generate_launch_description():
 
     ld.add_action(perception_asr_cmd)
 
-    # perception_asr2_cmd = Node(package='perception_asr_stressoverflow',
-    #                            executable='darknet_detection',
-    #                            output='screen',
-    #                            parameters=[{
-    #                              'use_sim_time': False
-    #                            }],
-    #                            remappings=[
-    #                              # ('camera_info', '/camera/depth/camera_info'),
-    #                              ('input_depth', '/camera/depth/image_raw'),
-    #                              ('input_detection_2d', '/darknet_ros/bounding_boxes'),
-    #                              ('output_detection_2d', '/output_detection_2d'),
-    #                            ])
-
-    # ld.add_action(perception_asr2_cmd)
-
     detectionTo3DfromDepth_cmd = Node(package='perception_asr_stressoverflow',
                                       executable='detection_2d_to_3d_depth',
                                       output='screen',
                                       parameters=[{
-                                        'use_sim_time': False
+                                        'use_sim_time': sim_kobuki
                                       }],
                                       remappings=[
                                         ('camera_info', '/camera/depth/camera_info'),
@@ -117,10 +106,10 @@ def generate_launch_description():
     ld.add_action(detectionTo3DfromDepth_cmd)
 
     tf_cmd = Node(package='perception_asr_stressoverflow',
-                  executable='tf_perception_asr',
+                  executable='detected_person_tf_pub',
                   output='screen',
                   parameters=[{
-                    'use_sim_time': False
+                    'use_sim_time': sim_kobuki
                   }],
                   remappings=[
                     ('input_3d', '/output_detection_3d'),
@@ -128,16 +117,13 @@ def generate_launch_description():
 
     ld.add_action(tf_cmd)
 
-    # HSVfilter_cmd = Node(package='perception_asr_stressoverflow',
-    #                           executable='hsv_filter',
-    #                           output='screen',
-    #                           parameters=[{
-    #                             'use_sim_time': False
-    #                           }],
-    #                           remappings=[
-    #                             ('camera_info', '/camera/depth/camera_info'),
-    #                             ('input_depth', '/camera/depth/image_raw'),
-    #                             ('output_detection_3d', '/darknet_ros/bounding_boxes'),
-    #                           ])
+    monitor_cmd = Node(package='perception_asr_stressoverflow',
+                       executable='detected_person_monitor',
+                       output='screen',
+                       parameters=[{
+                          'use_sim_time': sim_kobuki
+                       }],)
+
+    ld.add_action(monitor_cmd)
 
     return ld

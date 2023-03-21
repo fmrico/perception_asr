@@ -47,8 +47,8 @@ add_library(${PROJECT_NAME} SHARED
   src/perception_asr_stressoverflow/DarknetDetectionNode.cpp
   src/perception_asr_stressoverflow/DetectionTo3DfromPCNode.cpp
   src/perception_asr_stressoverflow/DetectionTo3DfromDepthNode.cpp
-  src/perception_asr_stressoverflow/tf_perception_asrNode.cpp
-  src/perception_asr_stressoverflow/ObstacleMonitorNode.cpp
+  src/perception_asr_stressoverflow/DetectedPersonTfPub.cpp
+  src/perception_asr_stressoverflow/DetectedPersonMonitor.cpp
 )
 ament_target_dependencies(${PROJECT_NAME} ${dependencies})
 
@@ -68,9 +68,13 @@ add_executable(detection_2d_to_3d_depth src/detection_2d_to_3d_depth_main.cpp)
 ament_target_dependencies(detection_2d_to_3d_depth ${dependencies})
 target_link_libraries(detection_2d_to_3d_depth ${PROJECT_NAME})
 
-add_executable(tf_perception_asr src/tf_perception_asr_main.cpp)
-ament_target_dependencies(tf_perception_asr ${dependencies})
-target_link_libraries(tf_perception_asr ${PROJECT_NAME})
+add_executable(detected_person_tf_pub src/detected_person_tf_pub_main.cpp)
+ament_target_dependencies(detected_person_tf_pub ${dependencies})
+target_link_libraries(detected_person_tf_pub ${PROJECT_NAME})
+
+add_executable(detected_person_monitor src/detected_person_monitor_main.cpp)
+ament_target_dependencies(detected_person_monitor ${dependencies})
+target_link_libraries(detected_person_monitor ${PROJECT_NAME})
 
 install(TARGETS
   ${PROJECT_NAME}
@@ -78,7 +82,8 @@ install(TARGETS
   darknet_detection
   detection_2d_to_3d_pc2
   detection_2d_to_3d_depth
-  tf_perception_asr
+  detected_person_tf_pub
+  detected_person_monitor
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib
   RUNTIME DESTINATION lib/${PROJECT_NAME}

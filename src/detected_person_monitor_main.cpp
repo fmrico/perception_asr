@@ -14,17 +14,16 @@
 
 #include <memory>
 
-#include "perception_asr_stressoverflow/DetectionTo3DfromDepthNode.hpp"
+#include "perception_asr_stressoverflow/DetectedPersonMonitor.hpp"
 #include "rclcpp/rclcpp.hpp"
 
 int main(int argc, char * argv[])
 {
   rclcpp::init(argc, argv);
 
-  auto node_converter =
-    std::make_shared<perception_asr_stressoverflow::DetectionTo3DfromDepthNode>();
+  auto person_monitor = std::make_shared<perception_asr_stressoverflow::DetectedPersonMonitor>();
 
-  rclcpp::spin(node_converter);
+  rclcpp::spin(person_monitor);
 
   rclcpp::shutdown();
 

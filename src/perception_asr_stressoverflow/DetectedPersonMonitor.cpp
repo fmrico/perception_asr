@@ -17,7 +17,7 @@
 
 #include <memory>
 
-#include "perception_asr_stressoverflow/ObstacleMonitorNode.hpp"
+#include "perception_asr_stressoverflow/DetectedPersonMonitor.hpp"
 
 #include "geometry_msgs/msg/transform_stamped.hpp"
 
@@ -30,38 +30,38 @@ namespace perception_asr_stressoverflow
 
 using namespace std::chrono_literals;
 
-ObstacleMonitorNode::ObstacleMonitorNode()
-: Node("obstacle_monitor"),
+DetectedPersonMonitor::DetectedPersonMonitor()
+: Node("person_monitor"),
   tf_buffer_(),
   tf_listener_(tf_buffer_)
 {
-  marker_pub_ = create_publisher<visualization_msgs::msg::Marker>("obstacle_marker", 1);
+  marker_pub_ = create_publisher<visualization_msgs::msg::Marker>("person_marker", 1);
 
   timer_ = create_wall_timer(
-    500ms, std::bind(&ObstacleMonitorNode::control_cycle, this));
+    500ms, std::bind(&DetectedPersonMonitor::control_cycle, this));
 }
 
 void
-ObstacleMonitorNode::control_cycle()
+DetectedPersonMonitor::control_cycle()
 {
-  geometry_msgs::msg::TransformStamped robot2obstacle;
+  geometry_msgs::msg::TransformStamped robot2person;
 
   try {
-    robot2obstacle = tf_buffer_.lookupTransform(
-      "base_footprint", "detected_obstacle", tf2::TimePointZero);
+    robot2person = tf_buffer_.lookupTransform(
+      "base_footprint", "detected_person", tf2::TimePointZero);
   } catch (tf2::TransformException & ex) {
-    RCLCPP_WARN(get_logger(), "Obstacle transform not found: %s", ex.what());
+    RCLCPP_WARN(get_logger(), "Person transform not found: %s", ex.what());
     return;
   }
 
-  double x = robot2obstacle.transform.translation.x;
-  double y = robot2obstacle.transform.translation.y;
-  double z = robot2obstacle.transform.translation.z;
-  //double theta = atan2(y, x);
+  double x = robot2person.transform.translation.x;
+  double y = robot2person.transform.translation.y;
+  double z = robot2person.transform.translation.z;
+  double theta = atan2(y, x);
 
-  /*RCLCPP_INFO(
-    get_logger(), "Obstacle detected at (%lf m, %lf m, , %lf m) = %lf rads",
-    x, y, z, theta);*/
+  RCLCPP_INFO(
+    get_logger(), "Person detected at (%lf m, %lf m, , %lf m) = %lf rads",
+    x, y, z, theta);
 
   visualization_msgs::msg::Marker obstacle_arrow;
   obstacle_arrow.header.frame_id = "base_footprint";
@@ -88,7 +88,6 @@ ObstacleMonitorNode::control_cycle()
   obstacle_arrow.scale.x = 0.02;
   obstacle_arrow.scale.y = 0.1;
   obstacle_arrow.scale.z = 0.1;
-
 
   marker_pub_->publish(obstacle_arrow);
 }
