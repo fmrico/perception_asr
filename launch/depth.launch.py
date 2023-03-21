@@ -67,9 +67,9 @@ def generate_launch_description():
             PythonLaunchDescriptionSource(os.path.join(darknet_dir,
                                                        'launch',
                                                        'darknet_ros.launch.py')),
-                                                       launch_arguments={
-                                                        'image': camera_remap,
-                                                        }.items())
+            launch_arguments={
+              'image': camera_remap,
+            }.items())
 
         ld.add_action(darknet_cmd)
 
