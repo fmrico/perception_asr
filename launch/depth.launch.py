@@ -30,7 +30,11 @@ def generate_launch_description():
     perception_asr_stressoverflow_dir = get_package_share_directory(
                                         'perception_asr_stressoverflow')
 
+    ir_robots_dir = get_package_share_directory(
+                                        'ir_robots')
+
     config = os.path.join(perception_asr_stressoverflow_dir, 'config', 'params.yaml')
+    ir_robots_config = os.path.join(ir_robots_dir, 'config', 'params.yaml')
 
     with open(config, "r") as stream:
         try:
@@ -39,15 +43,33 @@ def generate_launch_description():
         except yaml.YAMLError as exc:
             print(exc)
 
+    with open(ir_robots_config, "r") as stream:
+        try:
+            ir_conf = (yaml.safe_load(stream))
+
+        except yaml.YAMLError as exc:
+            print(exc)
+
     launch_darknet = conf['perception_asr_stressoverflow']['launchers']['launch_darknet']
+    kobuki_camera = ir_conf['ir_robots']['kobuki_camera']
 
     if launch_darknet:
         darknet_dir = get_package_share_directory('darknet_ros')
 
+        if 'xtion' in kobuki_camera:
+            camera_remap = 'camera/rgb/image_raw'
+        elif 'astra' in kobuki_camera:
+            camera_remap = 'camera/color/image_raw'
+        else:
+            camera_remap = 'image_raw'
+
         darknet_cmd = IncludeLaunchDescription(
             PythonLaunchDescriptionSource(os.path.join(darknet_dir,
                                                        'launch',
-                                                       'darknet_ros.launch.py')))
+                                                       'darknet_ros.launch.py')),
+                                                       launch_arguments={
+                                                        'image': camera_remap,
+                                                        }.items())
 
         ld.add_action(darknet_cmd)
 
