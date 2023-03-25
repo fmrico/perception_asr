@@ -130,7 +130,7 @@ It takes three main steps:
       
 ## Observations 🔎
 
-- There was a **bug** in [ir_robots](https://github.com/IntelligentRoboticsLabs/ir_robots) package, where the frame `base_footprint` is not set correctly, thus the tf calculation from the detected person to the robots could not be possible. However, using `base_link` does the job despite of being lifted a few milimeters from ground, since we are only using a 2D plane to maneuver the robot.
+- There was a **bug** in [ir_robots](https://github.com/IntelligentRoboticsLabs/ir_robots) package, where the frame `base_footprint` is not set correctly, thus the tf calculation from the detected person to the robot could not be possible. However, using `base_link` does the job despite of being lifted a few milimeters from ground, since we are only using a 2D plane to maneuver the robot.
 
 - *Continous Integration* (CI) setup. We have added a workflow to be triggered through **GitHub Actions** whenever a `pull request` is made. From this workflow, the code is built and tested in any enviroement we want[^1]. You can find this workflow [here](./.github/workflows/colcon.yaml). With this feature we can automatically test our code before pushing it to the `main` branch. This allows us to directly review the `pull request` without worrying about breaking the already pushed code, coding style... Since we will instantly see a checkmark with the test output. A further step that can be taken is to make this test to trigger another workflow that makes our work easier, like automatically deploy our packet! A.K.A. *Continous Deployment* (CD).
 
