@@ -148,7 +148,8 @@ Before launching the program in the real robot, **we have tested it beforehand i
 
 https://user-images.githubusercontent.com/92941081/227732563-009c99f2-180a-49ea-bc28-79fe884209ff.mp4
 
-> **IMPORTAN NOTE**: Some TF's on simulation enviroment are not properly set, thus the apparent erratic behaviour in the simulation video.
+
+> **IMPORTANT NOTE**: Some TF's on simulation enviroment are not properly set, thus the apparent erratic behaviour in the simulation video.
 
 Time for the real robot 😁
 
