@@ -120,17 +120,17 @@ It takes three main steps:
 
     Which is an array with all detected objects in the image along with its position relative to the camera. The last step is to use this information to calculate the position relative to the robot, since **we actually know the position of the camera relative to the robot**. *Awesome!*
     
-    This whole procedure takes place in [`DetectionTo3DfromDepthNode.cpp`](./src/perception_asr_stressoverflow/DetectionTo3DfromDepthNode.cpp). Here is also where we filter the detected objects to only go for `person`s.
+    This whole procedure takes place in [`DetectionTo3DfromDepthNode.cpp`](./src/perception_asr_stressoverflow/DetectionTo3DfromDepthNode.cpp).
     
 3. Once we got the information described earlier, we can take advantage of the [**TF system from ROS 2**](https://docs.ros.org/en/humble/Tutorials/Intermediate/Tf2/Tf2-Main.html) to calculate the real position in space from the detected object relative to the robot. *Just from an image!*
    
    There are actually **two** nodes using this:
       1. [`DetectedPersonMonitor.cpp`](./src/perception_asr_stressoverflow/DetectedPersonMonitor.cpp), which publishes a marker from the robot to the detected person, so we can debug the output from the whole procedure easily in [RViz](https://turtlebot.github.io/turtlebot4-user-manual/software/rviz.html).
-      2. [`DetectedPersonTfPub.cpp`](./src/perception_asr_stressoverflow/DetectedPersonTfPub.cpp), which publishes the TF (**T**rans**F**orm 😉) of the detected person.
+      2. [`DetectedPersonTfPub.cpp`](./src/perception_asr_stressoverflow/DetectedPersonTfPub.cpp), which publishes the TF (**T**rans**F**orm 😉) of the detected person. Here is also where we filter the detected objects to only publish TF's for `person`s.
       
 ## Observations 🔎
 
-- There was a **bug** in [ir_robots](https://github.com/IntelligentRoboticsLabs/ir_robots) package, where the frame `base_footprint` is not set correctly, thus the tf calculation from the detected person to the robot could not be possible. However, using `base_link` does the job despite of being lifted a few milimeters from ground, since we are only using a 2D plane to maneuver the robot.
+- There was a **bug** in [ir_robots](https://github.com/IntelligentRoboticsLabs/ir_robots) package, where the frame `base_footprint` is not set correctly, thus the tf calculation from the detected person to the robot could not be possible. However, using `base_link` does the job despite of being lifted a few milimeters from ground, since we are only using a 2D plane to maneuver the robot. However, the problem becomes even worse in the simulation eviroment. More details on [simulation test](#simulation-%EF%B8%8F) section.
 
 - *Continous Integration* (CI) setup. We have added a workflow to be triggered through **GitHub Actions** whenever a `pull request` is made. From this workflow, the code is built and tested in any enviroement we want[^1]. You can find this workflow [here](./.github/workflows/colcon.yaml). With this feature we can automatically test our code before pushing it to the `main` branch. This allows us to directly review the `pull request` without worrying about breaking the already pushed code, coding style... Since we will instantly see a checkmark with the test output. A further step that can be taken is to make this test to trigger another workflow that makes our work easier, like automatically deploy our packet! A.K.A. *Continous Deployment* (CD).
 
