@@ -144,8 +144,11 @@ We have checked the correct behaviour from the nodes by looking at the related t
 
 Before launching the program in the real robot, **we have tested it beforehand in a simulated enviroment**, using tools like [Gazebo](https://gazebosim.org/home) or [RViz](https://github.com/ros2/rviz). We were skeptical about `darknet_ros` capabilities to recognise a virtual person. Luckily for us, we were pleased by a fantastic TF and a Marker successfully published!
 
-
 > NOTE: We used `simple_office_with_people` map from [ir_robots/config/params.yaml](https://github.com/IntelligentRoboticsLabs/ir_robots/blob/60e610266f7be3d630684710eb8f18786034dda1/config/params.yaml).
+
+https://user-images.githubusercontent.com/92941081/227732563-009c99f2-180a-49ea-bc28-79fe884209ff.mp4
+
+> **IMPORTAN NOTE**: Some TF's on simulation enviroment are not properly set, thus the apparent erratic behaviour in the simulation video.
 
 Time for the real robot 😁
 
