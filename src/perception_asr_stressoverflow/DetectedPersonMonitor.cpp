@@ -38,7 +38,7 @@ DetectedPersonMonitor::DetectedPersonMonitor()
   marker_pub_ = create_publisher<visualization_msgs::msg::Marker>("person_marker", 1);
 
   timer_ = create_wall_timer(
-    500ms, std::bind(&DetectedPersonMonitor::control_cycle, this));
+    100ms, std::bind(&DetectedPersonMonitor::control_cycle, this));
 }
 
 void
@@ -48,7 +48,7 @@ DetectedPersonMonitor::control_cycle()
 
   try {
     robot2person = tf_buffer_.lookupTransform(
-      "base_footprint", "detected_person", tf2::TimePointZero);
+      "base_link", "detected_person", tf2::TimePointZero);
   } catch (tf2::TransformException & ex) {
     RCLCPP_WARN(get_logger(), "Person transform not found: %s", ex.what());
     return;
@@ -64,7 +64,7 @@ DetectedPersonMonitor::control_cycle()
     x, y, z, theta);
 
   visualization_msgs::msg::Marker obstacle_arrow;
-  obstacle_arrow.header.frame_id = "base_footprint";
+  obstacle_arrow.header.frame_id = "base_link";
   obstacle_arrow.header.stamp = now();
   obstacle_arrow.type = visualization_msgs::msg::Marker::ARROW;
   obstacle_arrow.action = visualization_msgs::msg::Marker::ADD;
