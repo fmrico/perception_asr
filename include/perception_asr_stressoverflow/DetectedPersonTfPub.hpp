@@ -15,7 +15,7 @@
 #ifndef PERCEPTION_ASR_STRESSOVERFLOW__DETECTED_PERSON_TF_PUB_HPP_
 #define PERCEPTION_ASR_STRESSOVERFLOW__DETECTED_PERSON_TF_PUB_HPP_
 
-#include <tf2_ros/static_transform_broadcaster.h>
+#include <tf2_ros/transform_broadcaster.h>
 #include <tf2_ros/buffer.h>
 #include <tf2_ros/transform_listener.h>
 
@@ -44,7 +44,7 @@ private:
   void tf_callback(vision_msgs::msg::Detection3DArray::UniquePtr msg);
 
   rclcpp::Subscription<vision_msgs::msg::Detection3DArray>::SharedPtr detecction_sub;
-  std::shared_ptr<tf2_ros::StaticTransformBroadcaster> tf_broadcaster_;
+  std::shared_ptr<tf2_ros::TransformBroadcaster> tf_broadcaster_;
 
   tf2::BufferCore tf_buffer_;
   tf2_ros::TransformListener tf_listener_;
