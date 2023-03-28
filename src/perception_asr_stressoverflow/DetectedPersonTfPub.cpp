@@ -46,7 +46,7 @@ DetectedPersonTfPub::DetectedPersonTfPub()
     "input_3d", rclcpp::SensorDataQoS(),
     std::bind(&DetectedPersonTfPub::tf_callback, this, _1));
 
-  tf_broadcaster_ = std::make_shared<tf2_ros::StaticTransformBroadcaster>(*this);
+  tf_broadcaster_ = std::make_shared<tf2_ros::TransformBroadcaster>(*this);
 }
 
 void
