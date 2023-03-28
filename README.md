@@ -115,7 +115,7 @@ It takes three main steps:
    `sensor_msgs/msg/CameraInfo`
    
    We can make a message from this type:
-   
+
    `vision_msgs/msg/Detection3DArray`
 
     Which is an array with all detected objects in the image along with its position relative to the camera. The last step is to use this information to calculate the position relative to the robot, since **we actually know the position of the camera relative to the robot**. *Awesome!*
@@ -154,6 +154,8 @@ https://user-images.githubusercontent.com/92941081/227732563-009c99f2-180a-49ea-
 Time for the real robot 😁
 
 #### Real World 🌍
+
+https://user-images.githubusercontent.com/92941081/228222092-625cf4f9-dd7e-49e6-beb7-37c321d6c23b.mp4
 
 ## About
 
