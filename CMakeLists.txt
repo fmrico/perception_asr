@@ -78,7 +78,7 @@ add_executable(detected_person_monitor src/detected_person_monitor_main.cpp)
 ament_target_dependencies(detected_person_monitor ${dependencies})
 target_link_libraries(detected_person_monitor ${PROJECT_NAME})
 
-add_executable(detected_chair src/detected_chair_tf_pub_main.cpp)
+add_executable(detected_chair_tf_pub src/detected_chair_tf_pub_main.cpp)
 ament_target_dependencies(detected_person_tf_pub ${dependencies})
 target_link_libraries(detected_chair_tf_pub ${PROJECT_NAME})
 
@@ -94,6 +94,8 @@ install(TARGETS
   detection_2d_to_3d_depth
   detected_person_tf_pub
   detected_person_monitor
+  detected_chair_tf_pub
+  detected_chair_monitor
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib
   RUNTIME DESTINATION lib/${PROJECT_NAME}
