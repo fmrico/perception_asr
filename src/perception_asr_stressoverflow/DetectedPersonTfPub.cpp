@@ -55,7 +55,7 @@ DetectedPersonTfPub::tf_callback(vision_msgs::msg::Detection3DArray::UniquePtr m
 {
   bool found_person = false;
   double min_distance = 1000000.0;
-  double min_distance_x = 0.0;
+  double min_distance_x = 5.0;
   double min_distance_y = 0.0;
   double min_distance_z = 0.0;
 
