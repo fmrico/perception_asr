@@ -77,6 +77,10 @@ DetectedPersonTfPub::tf_callback(vision_msgs::msg::Detection3DArray::UniquePtr m
 
       double distance = sqrt(pow(person_x, 2.0) + pow(person_y, 2.0));
 
+      if (distance < 0.5) {
+        continue;
+      }
+
       if (distance < min_distance) {
         min_distance = distance;
         min_distance_x = person_x;
