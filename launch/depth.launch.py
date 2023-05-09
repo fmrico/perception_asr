@@ -105,7 +105,7 @@ def generate_launch_description():
 
     ld.add_action(detectionTo3DfromDepth_cmd)
 
-    tf_cmd = Node(package='perception_asr_stressoverflow',
+    person_tf_cmd = Node(package='perception_asr_stressoverflow',
                   executable='detected_person_tf_pub',
                   output='screen',
                   parameters=[{
@@ -115,15 +115,36 @@ def generate_launch_description():
                     ('input_3d', '/output_detection_3d'),
                   ])
 
-    ld.add_action(tf_cmd)
+    ld.add_action(person_tf_cmd)
 
-    monitor_cmd = Node(package='perception_asr_stressoverflow',
+    person_monitor_cmd = Node(package='perception_asr_stressoverflow',
                        executable='detected_person_monitor',
                        output='screen',
                        parameters=[{
                           'use_sim_time': sim_kobuki
                        }],)
 
-    ld.add_action(monitor_cmd)
+    ld.add_action(person_monitor_cmd)
+
+    chair_tf_cmd = Node(package='perception_asr_stressoverflow',
+                  executable='detected_chair_tf_pub',
+                  output='screen',
+                  parameters=[{
+                    'use_sim_time': sim_kobuki
+                  }],
+                  remappings=[
+                    ('input_3d', '/output_detection_3d'),
+                  ])
+
+    ld.add_action(chair_tf_cmd)
+
+    chair_monitor_cmd = Node(package='perception_asr_stressoverflow',
+                       executable='detected_chair_monitor',
+                       output='screen',
+                       parameters=[{
+                          'use_sim_time': sim_kobuki
+                       }],)
+
+    ld.add_action(chair_monitor_cmd)
 
     return ld

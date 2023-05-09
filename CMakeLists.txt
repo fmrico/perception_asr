@@ -49,6 +49,8 @@ add_library(${PROJECT_NAME} SHARED
   src/perception_asr_stressoverflow/DetectionTo3DfromDepthNode.cpp
   src/perception_asr_stressoverflow/DetectedPersonTfPub.cpp
   src/perception_asr_stressoverflow/DetectedPersonMonitor.cpp
+  src/perception_asr_stressoverflow/DetectedChairTfPub.cpp
+  src/perception_asr_stressoverflow/DetectedChairMonitor.cpp
 )
 ament_target_dependencies(${PROJECT_NAME} ${dependencies})
 
@@ -75,6 +77,14 @@ target_link_libraries(detected_person_tf_pub ${PROJECT_NAME})
 add_executable(detected_person_monitor src/detected_person_monitor_main.cpp)
 ament_target_dependencies(detected_person_monitor ${dependencies})
 target_link_libraries(detected_person_monitor ${PROJECT_NAME})
+
+add_executable(detected_chair src/detected_chair_tf_pub_main.cpp)
+ament_target_dependencies(detected_person_tf_pub ${dependencies})
+target_link_libraries(detected_chair_tf_pub ${PROJECT_NAME})
+
+add_executable(detected_chair_monitor src/detected_chair_monitor_main.cpp)
+ament_target_dependencies(detected_person_monitor ${dependencies})
+target_link_libraries(detected_chair_monitor ${PROJECT_NAME})
 
 install(TARGETS
   ${PROJECT_NAME}

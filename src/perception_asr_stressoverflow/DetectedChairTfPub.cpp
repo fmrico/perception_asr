@@ -18,7 +18,7 @@
 #include <memory>
 #include <cmath>
 
-#include "perception_asr_stressoverflow/DetectedPersonTfPub.hpp"
+#include "perception_asr_stressoverflow/DetectedChairTfPub.hpp"
 #include "sensor_msgs/msg/image.hpp"
 #include "vision_msgs/msg/detection3_d_array.hpp"
 #include "geometry_msgs/msg/transform_stamped.hpp"
@@ -39,7 +39,7 @@ using std::placeholders::_1;
 using namespace std::chrono_literals;
 
 DetectedPersonTfPub::DetectedPersonTfPub()
-: Node("detected_person_tf_pub"),
+: Node("detected_chair_tf_pub"),
   tf_buffer_(),
   tf_listener_(tf_buffer_)
 {
@@ -53,7 +53,7 @@ DetectedPersonTfPub::DetectedPersonTfPub()
 void
 DetectedPersonTfPub::tf_callback(vision_msgs::msg::Detection3DArray::UniquePtr msg)
 {
-  bool found_person = false;
+  bool found_chair = false;
   double min_distance = 1000000.0;
   double min_distance_x = 0.0;
   double min_distance_y = 0.0;
@@ -65,27 +65,27 @@ DetectedPersonTfPub::tf_callback(vision_msgs::msg::Detection3DArray::UniquePtr m
     }
 
     for (const auto & result : detection.results) {
-      if (result.hypothesis.score < 0.8 || result.hypothesis.class_id != "person") {
+      if (result.hypothesis.score < 0.8 || result.hypothesis.class_id != "chair") {
         continue;
       }
 
-      double person_x = detection.bbox.center.position.x;
-      double person_y = detection.bbox.center.position.y;
-      double person_z = detection.bbox.center.position.z;
+      double chair_x = detection.bbox.center.position.x;
+      double chair_y = detection.bbox.center.position.y;
+      double chair_z = detection.bbox.center.position.z;
 
-      double distance = sqrt(pow(person_x, 2.0) + pow(person_y, 2.0));
+      double distance = sqrt(pow(chair_x, 2.0) + pow(chair_y, 2.0));
 
       if (distance < min_distance) {
         min_distance = distance;
-        min_distance_x = person_x;
-        min_distance_y = person_y;
-        min_distance_z = person_z;
-        found_person = true;
+        min_distance_x = chair_x;
+        min_distance_y = chair_y;
+        min_distance_z = chair_z;
+        found_chair = true;
       }
     }
   }
 
-  if (!found_person) {
+  if (!found_chair) {
     return;
   }
 
@@ -115,7 +115,7 @@ DetectedPersonTfPub::tf_callback(vision_msgs::msg::Detection3DArray::UniquePtr m
 
   odom2person_msg.header.stamp = msg->header.stamp;
   odom2person_msg.header.frame_id = "odom";
-  odom2person_msg.child_frame_id = "detected_person";
+  odom2person_msg.child_frame_id = "detected_chair";
 
   tf_broadcaster_->sendTransform(odom2person_msg);
 }
