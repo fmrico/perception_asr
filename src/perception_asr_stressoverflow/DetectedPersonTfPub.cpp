@@ -53,13 +53,13 @@ DetectedPersonTfPub::DetectedPersonTfPub()
 void
 DetectedPersonTfPub::tf_callback(vision_msgs::msg::Detection3DArray::UniquePtr msg)
 {
+  bool found_person = false;
   double min_distance = 1000000.0;
   double min_distance_x = 0.0;
   double min_distance_y = 0.0;
   double min_distance_z = 0.0;
 
   for (const auto & detection : msg->detections) {
-
     if (detection.results.empty()) {
       continue;
     }
@@ -68,6 +68,8 @@ DetectedPersonTfPub::tf_callback(vision_msgs::msg::Detection3DArray::UniquePtr m
       if (result.hypothesis.score < 0.5 || result.hypothesis.class_id != "person") {
         continue;
       }
+
+      found_person = true;
 
       double person_x = detection.bbox.center.position.x;
       double person_y = detection.bbox.center.position.y;
@@ -80,13 +82,16 @@ DetectedPersonTfPub::tf_callback(vision_msgs::msg::Detection3DArray::UniquePtr m
         min_distance_x = person_x;
         min_distance_y = person_y;
         min_distance_z = person_z;
-      } else {
-        continue;
       }
     }
-  
+  }
+
+  if (!found_person) {
+    return;
+  }
+
   tf2::Transform camera2person;
-  camera2person.setOrigin(tf2::Vector3(person_x, person_y, person_z));
+  camera2person.setOrigin(tf2::Vector3(min_distance_x, min_distance_y, min_distance_z));
   camera2person.setRotation(tf2::Quaternion(1.0, 0.0, 0.0, 1.0));
 
   geometry_msgs::msg::TransformStamped odom2camera_msg;
@@ -110,7 +115,6 @@ DetectedPersonTfPub::tf_callback(vision_msgs::msg::Detection3DArray::UniquePtr m
   odom2person_msg.child_frame_id = "detected_person";
 
   tf_broadcaster_->sendTransform(odom2person_msg);
-  }
 }
 
 }  // namespace perception_asr_stressoverflow
