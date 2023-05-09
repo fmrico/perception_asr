@@ -80,9 +80,8 @@ DetectedPersonTfPub::tf_callback(vision_msgs::msg::Detection3DArray::UniquePtr m
         min_distance_x = person_x;
         min_distance_y = person_y;
         min_distance_z = person_z;
+        found_person = true;
       }
-
-      found_person = true;
     }
   }
 
