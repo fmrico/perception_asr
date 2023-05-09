@@ -73,10 +73,6 @@ DetectedPersonTfPub::tf_callback(vision_msgs::msg::Detection3DArray::UniquePtr m
       double person_y = detection.bbox.center.position.y;
       double person_z = detection.bbox.center.position.z;
 
-      if (person_x < 0.5) {
-        continue;
-      }
-
       double distance = sqrt(pow(person_x, 2.0) + pow(person_y, 2.0));
 
       if (distance < min_distance) {
