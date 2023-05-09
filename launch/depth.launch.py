@@ -106,23 +106,23 @@ def generate_launch_description():
     ld.add_action(detectionTo3DfromDepth_cmd)
 
     person_tf_cmd = Node(package='perception_asr_stressoverflow',
-                  executable='detected_person_tf_pub',
-                  output='screen',
-                  parameters=[{
-                    'use_sim_time': sim_kobuki
-                  }],
-                  remappings=[
-                    ('input_3d', '/output_detection_3d'),
-                  ])
+                         executable='detected_person_tf_pub',
+                         output='screen',
+                         parameters=[{
+                           'use_sim_time': sim_kobuki
+                         }],
+                         remappings=[
+                           ('input_3d', '/output_detection_3d'),
+                         ])
 
     ld.add_action(person_tf_cmd)
 
     person_monitor_cmd = Node(package='perception_asr_stressoverflow',
-                       executable='detected_person_monitor',
-                       output='screen',
-                       parameters=[{
-                          'use_sim_time': sim_kobuki
-                       }],)
+                              executable='detected_person_monitor',
+                              output='screen',
+                              parameters=[{
+                                 'use_sim_time': sim_kobuki
+                              }],)
 
     ld.add_action(person_monitor_cmd)
 
