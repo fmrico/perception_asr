@@ -69,8 +69,6 @@ DetectedPersonTfPub::tf_callback(vision_msgs::msg::Detection3DArray::UniquePtr m
         continue;
       }
 
-      found_person = true;
-
       double person_x = detection.bbox.center.position.x;
       double person_y = detection.bbox.center.position.y;
       double person_z = detection.bbox.center.position.z;
@@ -87,6 +85,8 @@ DetectedPersonTfPub::tf_callback(vision_msgs::msg::Detection3DArray::UniquePtr m
         min_distance_y = person_y;
         min_distance_z = person_z;
       }
+
+      found_person = true;
     }
   }
 
