@@ -38,20 +38,20 @@ namespace perception_asr_stressoverflow
 using std::placeholders::_1;
 using namespace std::chrono_literals;
 
-DetectedPersonTfPub::DetectedPersonTfPub()
+DetectedChairTfPub::DetectedChairTfPub()
 : Node("detected_chair_tf_pub"),
   tf_buffer_(),
   tf_listener_(tf_buffer_)
 {
   detecction_sub = create_subscription<vision_msgs::msg::Detection3DArray>(
     "input_3d", rclcpp::SensorDataQoS(),
-    std::bind(&DetectedPersonTfPub::tf_callback, this, _1));
+    std::bind(&DetectedChairTfPub::tf_callback, this, _1));
 
   tf_broadcaster_ = std::make_shared<tf2_ros::TransformBroadcaster>(*this);
 }
 
 void
-DetectedPersonTfPub::tf_callback(vision_msgs::msg::Detection3DArray::UniquePtr msg)
+DetectedChairTfPub::tf_callback(vision_msgs::msg::Detection3DArray::UniquePtr msg)
 {
   bool found_chair = false;
   double min_distance = 1000000.0;
@@ -93,9 +93,9 @@ DetectedPersonTfPub::tf_callback(vision_msgs::msg::Detection3DArray::UniquePtr m
     return;
   }
 
-  tf2::Transform camera2person;
-  camera2person.setOrigin(tf2::Vector3(min_distance_x, min_distance_y, min_distance_z));
-  camera2person.setRotation(tf2::Quaternion(1.0, 0.0, 0.0, 1.0));
+  tf2::Transform camera2chair;
+  camera2chair.setOrigin(tf2::Vector3(min_distance_x, min_distance_y, min_distance_z));
+  camera2chair.setRotation(tf2::Quaternion(1.0, 0.0, 0.0, 1.0));
 
   geometry_msgs::msg::TransformStamped odom2camera_msg;
   tf2::Stamped<tf2::Transform> odom2camera;
@@ -105,19 +105,19 @@ DetectedPersonTfPub::tf_callback(vision_msgs::msg::Detection3DArray::UniquePtr m
       tf2::timeFromSec(rclcpp::Time(msg->header.stamp).seconds()));
     tf2::fromMsg(odom2camera_msg, odom2camera);
   } catch (tf2::TransformException & ex) {
-    RCLCPP_WARN(get_logger(), "Person transform not found: %s", ex.what());
+    RCLCPP_WARN(get_logger(), "Chair transform not found: %s", ex.what());
     return;
   }
-  tf2::Transform odom2person = odom2camera * camera2person;
+  tf2::Transform odom2chair = odom2camera * camera2chair;
 
-  geometry_msgs::msg::TransformStamped odom2person_msg;
-  odom2person_msg.transform = tf2::toMsg(odom2person);
+  geometry_msgs::msg::TransformStamped odom2chair_msg;
+  odom2chair_msg.transform = tf2::toMsg(odom2chair);
 
-  odom2person_msg.header.stamp = msg->header.stamp;
-  odom2person_msg.header.frame_id = "odom";
-  odom2person_msg.child_frame_id = "detected_chair";
+  odom2chair_msg.header.stamp = msg->header.stamp;
+  odom2chair_msg.header.frame_id = "odom";
+  odom2chair_msg.child_frame_id = "detected_chair";
 
-  tf_broadcaster_->sendTransform(odom2person_msg);
+  tf_broadcaster_->sendTransform(odom2chair_msg);
 }
 
 }  // namespace perception_asr_stressoverflow
