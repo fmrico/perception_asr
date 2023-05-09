@@ -16,6 +16,7 @@
 #include <tf2/LinearMath/Quaternion.h>
 
 #include <memory>
+#include <cmath>
 
 #include "perception_asr_stressoverflow/DetectedPersonTfPub.hpp"
 #include "sensor_msgs/msg/image.hpp"
@@ -52,43 +53,63 @@ DetectedPersonTfPub::DetectedPersonTfPub()
 void
 DetectedPersonTfPub::tf_callback(vision_msgs::msg::Detection3DArray::UniquePtr msg)
 {
+  double min_distance = 1000000.0;
+  double min_distance_x = 0.0;
+  double min_distance_y = 0.0;
+  double min_distance_z = 0.0;
+
   for (const auto & detection : msg->detections) {
 
     if (detection.results.empty()) {
       continue;
     }
 
-    if (detection.results[0].hypothesis.class_id == "person") {
+    for (const auto & result : detection.results) {
+      if (result.hypothesis.score < 0.5 || result.hypothesis.class_id != "person") {
+        continue;
+      }
+
       double person_x = detection.bbox.center.position.x;
       double person_y = detection.bbox.center.position.y;
       double person_z = detection.bbox.center.position.z;
 
-      tf2::Transform camera2person;
-      camera2person.setOrigin(tf2::Vector3(person_x, person_y, person_z));
-      camera2person.setRotation(tf2::Quaternion(0.0, 0.0, 0.0, 1.0));
+      double distance = sqrt(pow(person_x, 2), pow(person_y, 2));
 
-      geometry_msgs::msg::TransformStamped odom2camera_msg;
-      tf2::Stamped<tf2::Transform> odom2camera;
-      try {
-        odom2camera_msg = tf_buffer_.lookupTransform(
-          "odom", "camera_depth_optical_frame",
-          tf2::timeFromSec(rclcpp::Time(msg->header.stamp).seconds()));
-        tf2::fromMsg(odom2camera_msg, odom2camera);
-      } catch (tf2::TransformException & ex) {
-        RCLCPP_WARN(get_logger(), "Person transform not found: %s", ex.what());
-        return;
+      if (distance < min_distance) {
+        min_distance = distance;
+        min_distance_x = person_x;
+        min_distance_y = person_y;
+        min_distance_z = person_z;
+      } else {
+        continue;
       }
-      tf2::Transform odom2person = odom2camera * camera2person;
-
-      geometry_msgs::msg::TransformStamped odom2person_msg;
-      odom2person_msg.transform = tf2::toMsg(odom2person);
-
-      odom2person_msg.header.stamp = msg->header.stamp;
-      odom2person_msg.header.frame_id = "odom";
-      odom2person_msg.child_frame_id = "detected_person";
-
-      tf_broadcaster_->sendTransform(odom2person_msg);
     }
+  
+  tf2::Transform camera2person;
+  camera2person.setOrigin(tf2::Vector3(person_x, person_y, person_z));
+  camera2person.setRotation(tf2::Quaternion(1.0, 0.0, 0.0, 1.0));
+
+  geometry_msgs::msg::TransformStamped odom2camera_msg;
+  tf2::Stamped<tf2::Transform> odom2camera;
+  try {
+    odom2camera_msg = tf_buffer_.lookupTransform(
+      "odom", "camera_depth_optical_frame",
+      tf2::timeFromSec(rclcpp::Time(msg->header.stamp).seconds()));
+    tf2::fromMsg(odom2camera_msg, odom2camera);
+  } catch (tf2::TransformException & ex) {
+    RCLCPP_WARN(get_logger(), "Person transform not found: %s", ex.what());
+    return;
+  }
+  tf2::Transform odom2person = odom2camera * camera2person;
+
+  geometry_msgs::msg::TransformStamped odom2person_msg;
+  odom2person_msg.transform = tf2::toMsg(odom2person);
+
+  odom2person_msg.header.stamp = msg->header.stamp;
+  odom2person_msg.header.frame_id = "odom";
+  odom2person_msg.child_frame_id = "detected_person";
+
+  tf_broadcaster_->sendTransform(odom2person_msg);
   }
 }
 
