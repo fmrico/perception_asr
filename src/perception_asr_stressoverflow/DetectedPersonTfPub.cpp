@@ -55,7 +55,7 @@ DetectedPersonTfPub::tf_callback(vision_msgs::msg::Detection3DArray::UniquePtr m
 {
   bool found_person = false;
   double min_distance = 1000000.0;
-  double min_distance_x = 5.0;
+  double min_distance_x = 0.0;
   double min_distance_y = 0.0;
   double min_distance_z = 0.0;
 
@@ -65,7 +65,7 @@ DetectedPersonTfPub::tf_callback(vision_msgs::msg::Detection3DArray::UniquePtr m
     }
 
     for (const auto & result : detection.results) {
-      if (result.hypothesis.score < 0.5 || result.hypothesis.class_id != "person") {
+      if (result.hypothesis.score < 0.8 || result.hypothesis.class_id != "person") {
         continue;
       }
 
@@ -74,6 +74,10 @@ DetectedPersonTfPub::tf_callback(vision_msgs::msg::Detection3DArray::UniquePtr m
       double person_z = detection.bbox.center.position.z;
 
       double distance = sqrt(pow(person_x, 2.0) + pow(person_y, 2.0));
+
+      if (distance < 0.5) {
+        continue;
+      }
 
       if (distance < min_distance) {
         min_distance = distance;
@@ -86,6 +90,10 @@ DetectedPersonTfPub::tf_callback(vision_msgs::msg::Detection3DArray::UniquePtr m
   }
 
   if (!found_person) {
+    return;
+  }
+
+  if (min_distance_x == 0.0 && min_distance_y == 0.0 && min_distance_z == 0.0) {
     return;
   }
 
