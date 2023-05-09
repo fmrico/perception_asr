@@ -35,7 +35,7 @@ DetectedChairMonitor::DetectedChairMonitor()
   tf_buffer_(),
   tf_listener_(tf_buffer_)
 {
-  marker_pub_ = create_publisher<visualization_msgs::msg::Marker>("person_marker", 1);
+  marker_pub_ = create_publisher<visualization_msgs::msg::Marker>("chair_marker", 1);
 
   timer_ = create_wall_timer(
     100ms, std::bind(&DetectedChairMonitor::control_cycle, this));
