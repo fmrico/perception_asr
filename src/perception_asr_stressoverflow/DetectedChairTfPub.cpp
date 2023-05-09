@@ -65,7 +65,7 @@ DetectedChairTfPub::tf_callback(vision_msgs::msg::Detection3DArray::UniquePtr ms
     }
 
     for (const auto & result : detection.results) {
-      if (result.hypothesis.score < 0.8 || result.hypothesis.class_id != "chair") {
+      if (result.hypothesis.score < 0.6 || result.hypothesis.class_id != "chair") {
         continue;
       }
 
