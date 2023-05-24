@@ -51,6 +51,8 @@ add_library(${PROJECT_NAME} SHARED
   src/perception_asr_stressoverflow/DetectedPersonMonitor.cpp
   src/perception_asr_stressoverflow/DetectedChairTfPub.cpp
   src/perception_asr_stressoverflow/DetectedChairMonitor.cpp
+  src/perception_asr_stressoverflow/DetectedBagTfPub.cpp
+  src/perception_asr_stressoverflow/DetectedBagMonitor.cpp
 )
 ament_target_dependencies(${PROJECT_NAME} ${dependencies})
 
@@ -86,6 +88,14 @@ add_executable(detected_chair_monitor src/detected_chair_monitor_main.cpp)
 ament_target_dependencies(detected_person_monitor ${dependencies})
 target_link_libraries(detected_chair_monitor ${PROJECT_NAME})
 
+add_executable(detected_bag_tf_pub src/detected_bag_tf_pub_main.cpp)
+ament_target_dependencies(detected_person_tf_pub ${dependencies})
+target_link_libraries(detected_bag_tf_pub ${PROJECT_NAME})
+
+add_executable(detected_bag_monitor src/detected_bag_monitor_main.cpp)
+ament_target_dependencies(detected_person_monitor ${dependencies})
+target_link_libraries(detected_bag_monitor ${PROJECT_NAME})
+
 install(TARGETS
   ${PROJECT_NAME}
   hsv_filter
@@ -96,6 +106,8 @@ install(TARGETS
   detected_person_monitor
   detected_chair_tf_pub
   detected_chair_monitor
+  detected_bag_tf_pub
+  detected_bag_monitor
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib
   RUNTIME DESTINATION lib/${PROJECT_NAME}

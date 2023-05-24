@@ -147,4 +147,25 @@ def generate_launch_description():
 
     ld.add_action(chair_monitor_cmd)
 
+    bag_tf_cmd = Node(package='perception_asr_stressoverflow',
+                        executable='detected_bag_tf_pub',
+                        output='screen',
+                        parameters=[{
+                          'use_sim_time': sim_kobuki
+                        }],
+                        remappings=[
+                          ('input_3d', '/output_detection_3d'),
+                        ])
+
+    ld.add_action(bag_tf_cmd)
+
+    bag_monitor_cmd = Node(package='perception_asr_stressoverflow',
+                             executable='detected_bag_monitor',
+                             output='screen',
+                             parameters=[{
+                                 'use_sim_time': sim_kobuki
+                             }],)
+
+    ld.add_action(bag_monitor_cmd)
+
     return ld
