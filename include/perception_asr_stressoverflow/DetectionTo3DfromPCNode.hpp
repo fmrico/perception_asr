@@ -1,4 +1,4 @@
-// Copyright 2023 Intelligent Robotics Lab
+// Copyright (c) 2023 StressOverflow
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef PERCEPTION_ASR__DETECTIONTO3DFROMPCNODE_HPP_
-#define PERCEPTION_ASR__DETECTIONTO3DFROMPCNODE_HPP_
+#ifndef PERCEPTION_ASR_STRESSOVERFLOW__DETECTIONTO3DFROMPCNODE_HPP_
+#define PERCEPTION_ASR_STRESSOVERFLOW__DETECTIONTO3DFROMPCNODE_HPP_
 
 #include <memory>
 
@@ -26,7 +26,7 @@
 
 #include "rclcpp/rclcpp.hpp"
 
-namespace perception_asr
+namespace perception_asr_stressoverflow
 {
 
 class DetectionTo3DfromPCNode : public rclcpp::Node
@@ -49,6 +49,6 @@ private:
   rclcpp::Publisher<vision_msgs::msg::Detection3DArray>::SharedPtr detection_pub_;
 };
 
-}  // namespace perception_asr
+}  // namespace perception_asr_stressoverflow
 
-#endif  // PERCEPTION_ASR__DETECTIONTO3DFROMPCNODE_HPP_
+#endif  // PERCEPTION_ASR_STRESSOVERFLOW__DETECTIONTO3DFROMPCNODE_HPP_

@@ -1,4 +1,4 @@
-// Copyright 2023 (c) StressOverflow
+// Copyright 2021 (c) StressOverflow
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,17 +14,20 @@
 
 #include <memory>
 
-#include "perception_asr_stressoverflow/DetectionTo3DfromPCNode.hpp"
+#include "perception_asr_stressoverflow/DetectedPersonTfPub.hpp"
+
 #include "rclcpp/rclcpp.hpp"
 
 int main(int argc, char * argv[])
 {
   rclcpp::init(argc, argv);
 
-  auto node_converter = std::make_shared<perception_asr_stressoverflow::DetectionTo3DfromPCNode>();
+  auto detected_person_tf_pub =
+    std::make_shared<perception_asr_stressoverflow::DetectedPersonTfPub>();
 
-  rclcpp::spin(node_converter);
+  rclcpp::spin(detected_person_tf_pub);
 
   rclcpp::shutdown();
+
   return 0;
 }
